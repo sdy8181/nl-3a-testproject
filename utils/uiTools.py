@@ -106,14 +106,14 @@ class UiTools:
         :return:
         '''
         cur_dir = os.path.dirname(os.path.realpath(__file__))
-        init_png = os.path.join(os.path.dirname(cur_dir), 'diffImages', 'raw.png')
+        init_png = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages', 'raw.png')
         d.screenshot(init_png)
         im = Image.open(init_png)
 
         coordinate = (position['left'], position['top'], position['right'], position['bottom'])
         region = im.crop(coordinate)
 
-        file_path = os.path.join(os.path.dirname(cur_dir), 'diffImages', file_name)
+        file_path = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages', file_name)
         region.save(file_path)
 
         return file_path
