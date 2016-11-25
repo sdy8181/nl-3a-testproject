@@ -8,12 +8,11 @@ Created on 11/1/16
 import os
 import platform
 import time
-
 import serial
+from PIL import Image
 
 from utils.helpTools import ht
 from utils.helpTools import d
-
 
 class UiTools:
 
@@ -99,7 +98,24 @@ class UiTools:
         print(volume_value)
         return volume_value
 
+    def cutting_device_screenshot(self, file_name, position):
+        '''
+        根据坐标截屏，保存到指定文件
+        :param file_path: 保存的文件名
+        :param position: 坐标位置参数
+        :return:
+        '''
+        cur_dir = os.path.dirname(os.path.realpath(__file__))
+        init_png = os.path.join(os.path.dirname(cur_dir), 'diffImages', 'raw.png')
+        d.screenshot(init_png)
+        im = Image.open(init_png)
 
+        coordinate = (position['left'], position['top'], position['right'], position['bottom'])
+        region = im.crop(coordinate)
 
+        file_path = os.path.join(os.path.dirname(cur_dir), 'diffImages', file_name)
+        region.save(file_path)
+
+        return file_path
 
 uit = UiTools()
