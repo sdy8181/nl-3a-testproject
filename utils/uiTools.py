@@ -106,16 +106,66 @@ class UiTools:
         :return:
         '''
         cur_dir = os.path.dirname(os.path.realpath(__file__))
-        init_png = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages', 'raw.png')
+        diffImages_path = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages')
+
+        if not os.path.exists(diffImages_path):
+            os.mkdir(diffImages_path)
+
+        init_png = os.path.join(diffImages_path, 'raw.png')
+
+        try:
+            os.remove(init_png)
+        except:
+            pass
+
         d.screenshot(init_png)
         im = Image.open(init_png)
 
         coordinate = (position['left'], position['top'], position['right'], position['bottom'])
         region = im.crop(coordinate)
 
-        file_path = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages', file_name)
+        file_path = os.path.join(diffImages_path, file_name)
+        try:
+            os.remove(file_path)
+        except:
+            pass
+
         region.save(file_path)
 
         return file_path
 
+    def get_clickcoord_from_bounds(self, **kwargs):
+        """
+        获取指定元素的中心坐标
+        :param kwargs:
+        :return:
+        """
+        ele = d(**kwargs)
+        if ele.wait.exists():
+            bounds = ele.info['bounds']
+            x = (bounds['left'] + bounds['right']) / 2
+            y = (bounds['bottom'] + bounds['top']) / 2
+            return (x, y)
+        else:
+            self.raise_Exception_info('指定元素不存在')
+
+    def get_clickcoord_by_ele(self, ele):
+        """
+        获取指定元素的中心坐标
+        :param ele: 元素对象
+        :return:
+        """
+        bounds = ele.info['bounds']
+        x = (bounds['left'] + bounds['right']) / 2
+        y = (bounds['bottom'] + bounds['top']) / 2
+        return x, y
+
 uit = UiTools()
+# ele = d(resourceId='com.pateo.launcher:id/multimediaLayout')
+# bounds = ele.info['bounds']
+# p1 = uit.cutting_device_screenshot('a.png', bounds)
+# time.sleep(10)
+# p2 = uit.cutting_device_screenshot('b.png', bounds)
+# ret = ht.get_image_diff_data(p1, p2)
+# print(ret)
+

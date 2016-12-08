@@ -185,6 +185,11 @@ class HelpTools:
 
 ht = HelpTools()
 d = ht.get_device_obj()
+
+__d_info = d.info
+d_height = __d_info['displaySizeDpY']
+d_width = __d_info['displaySizeDpX']
+
 p = ht.get_phone_obj()
 
 if __name__ == '__main__':

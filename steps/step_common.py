@@ -5,9 +5,9 @@ import time
 from behave import when, then
 
 from elements.common import Common
-from utils.helpTools import ht
+from utils.helpTools import ht, MAP_VAR
 from utils.uiTools import uit
-from utils.helpTools import d
+from utils.helpTools import d, d_height, d_width
 
 
 @when(u'< 延时')
@@ -17,18 +17,13 @@ def step_impl(context):
     time.sleep(int(sec))
 
 
-@then(u'< 验证放音通道一致')
+@then(u'< 验证音频通道')
 def step_impl(context):
     chk_tinymix = context.table[0]['chk_tinymix']
     # 获取当前的放音通道
     cur_tinymix = ht.get_cur_tinymix()
     if chk_tinymix != cur_tinymix:
-        uit.raise_Exception_info('放音通道不一致，期望值为《' + chk_tinymix + '》，实际值为《' + cur_tinymix + '》')
-
-
-@when(u'< 回到系统主界面')
-def step_impl(context):
-    Common().back_to_launcher()
+        uit.raise_Exception_info('音频通道不一致，期望值为《' + chk_tinymix + '》，实际值为《' + cur_tinymix + '》')
 
 
 @when(u'< 播放音频文件')
@@ -36,44 +31,12 @@ def step_impl(context):
     # 获取参数
     voiceFile = context.table[0]['voice_file']
     ht.play_voice(voiceFile)
-    time.sleep(4)
-
-
-@when(u'< ivoka唤醒应用')
-def step_impl(context):
-    # 获取需要播放的音频文件
-    voice_name = context.table[0]['voice_name']
-    Common().ivoka_start_app(voice_name)
-
-
-@when(u'< 获取MEDIA音量')
-def step_impl(context):
-    # 获取出参
-    param = context.table[0]['o_result']
-    volume_value = Common().get_media_volume()
-    # 保存在上下文变量中
-    ht.set_context_map(param, volume_value)
-
-
-@then(u'< 验证MEDIA音量一致')
-def step_impl(context):
-    # 获取入参
-    param = context.table[0]['chk_volume']
-    if str(param).startswith('o_'):
-        chk_volume = ht.get_context_map(param)
-    else:
-        chk_volume = param
-    # 获取当前的音量
-    cur_volume = Common().get_media_volume()
-    # 校验是否一致
-    if cur_volume != chk_volume:
-        uit.raise_Exception_info('Media音量不一致，期望值为《' + chk_volume + '》，实际值为《' + cur_volume + '》')
 
 
 @then(u'< 验证当前应用')
 def step_impl(context):
     # 获取期望应用名称
-    chk_app_name = context.table[0]['chk_app_name']
+    chk_app_name = context.table[0]['app_name']
     # 获取当前应用名称
     cur_app_name = Common().get_current_package_name()
     # 校验
@@ -91,7 +54,7 @@ def step_impl(context):
     Common().controlPoweron()
 
 
-@then(u'< 验证两个对象值')
+@then(u'< 验证对象值')
 def step_impl(context):
     # 获取两个对象和一个比较字符
     param1 = context.table[0]['param1']
@@ -99,10 +62,10 @@ def step_impl(context):
     opt = context.table[0]['option']
 
     if param1.startswith('o_'):
-        param1 = ht.get_context_map(param1)
+        param1 = MAP_VAR.get(param1)
 
     if param2.startswith('o_'):
-        param2 = ht.get_context_map(param2)
+        param2 = MAP_VAR.get(param2)
 
     if opt == '==':
         flag = param1.lower() == param2.lower()
@@ -115,21 +78,50 @@ def step_impl(context):
     elif opt == "<":
         flag = int(param1.lower()) < int(param2.lower())
     else:
-        raise ('暂时不支持改操作符，请联系脚本维护人员')
+        raise Exception('暂时不支持改操作符，请联系脚本维护人员')
 
     if not flag:
         uit.raise_Exception_info('比较失败《' + param1 + ' ' + opt + ' ' + param2 + '》')
 
 
-@then(u'< 验证当前界面包含文本')
+@then(u'< 验证文本是否存在')
 def step_impl(context):
-    txt = context.table[0]['contains_txt']
+    #获取入参
+    txt = context.table[0]['text']
+    exists_flag = context.table[0]['exists_flag']
+
     ele = d(textContains=txt)
-    if not ele.wait.exists(timeout=ht.TIME_OUT):
-        uit.raise_Exception_info('文本信息《' + txt + '》没有包含在界面中')
+
+    if not str(ele.wait.exists()).lower() == exists_flag.lower():
+        uit.raise_Exception_info('验证文本是否存在失败')
 
 
 @when(u'< 重启设备')
 def step_impl(context):
     device_serial = ht.get_conf_value('deviceSerial')
     os.popen('adb -s ' + device_serial + ' shell reboot')
+
+@when(u'< 下拉进程菜单')
+def step_impl(context):
+    d.swipe(d_width / 2, 0, d_width / 2, d_height, 20)
+
+
+@when(u'< 收起进程菜单')
+def step_impl(context):
+    d.swipe(d_width / 2, d_height, d_width / 2, 0, 20)
+
+
+@when(u'< 按硬按键')
+def step_impl(context):
+    # 获取硬按键关键词
+    key_word = context.table[0]['key']
+
+    if key_word.lower() == 'home':
+        d.press.home()
+    elif key_word.lower() == 'v-':
+        d.press.volume_down()
+    elif key_word.lower() == 'v+':
+        d.press.volume_up()
+    else:
+        uit.raise_Exception_info('无法识别的Key')
+

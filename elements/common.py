@@ -8,10 +8,22 @@ import os
 import platform
 import time
 import serial
-from elements.audio import Audio
 from utils.helpTools import ht
 from utils.uiTools import uit
-from utils.helpTools import d
+from utils.helpTools import d, d_height, d_width
+
+
+#底部控制栏上各APP坐标，统一定义维护
+Bottom_App_Coord={
+    '导航':   (236,670),
+    '电话':   (438,670),
+    '收音机': (640,670),
+    '多媒体': (842,670),
+    '天气':   (1044,670),
+}
+
+
+
 
 
 class Common:
@@ -22,31 +34,11 @@ class Common:
         :desription: 根据当前报名判断回到主界面的方法，然后调用相应方法回到主界面
         :return:
         '''
-        pass
 
-    # 播放语音文件唤醒应用
-    def ivoka_start_app(self, voice_name):
-        ivoka_flag = False
-
-        ht.play_voice('你好语音助理.m4a')
-        ele = d(text='你好，请说')
-        ele1 = d(text='没听清，请再说一次')
-        loop = 0
-        while (loop <= 3) and (not ivoka_flag):
-            if ele.wait.exists(timeout=8000):
-                ht.play_voice(voice_name)
-                ivoka_flag = True
-
-                if ele1.wait.exists(timeout=8000):
-                    ht.play_voice(voice_name)
-                    ivoka_flag = True
-            else:
-                ht.play_voice('你好语音助理.m4a')
-                loop += 1
-
-        if not ivoka_flag:
-            uit.raise_Exception_info('ivoka唤醒失败')
-
+        d.press.home()
+        # 判断是否在第一屏
+        while not d(textContains='导航').exists:
+            d.swipe(0, d_height / 2, d_width, d_height / 2, 20)
 
     def connect_special_wifi(self, ssid, pwd):
         '''
@@ -57,3 +49,36 @@ class Common:
         '''
         pass
 
+    def get_current_package_name(self):
+        """
+        获取当前应用
+        :return:
+        """
+        current_package_name = d.info['currentPackageName']
+        if current_package_name == 'com.pateo.launcher':
+            return '主页'
+        elif current_package_name == 'com.pateo.as21.music':
+            return '音乐'
+        elif current_package_name == 'com.pateo.radio':
+            return '收音机'
+        else:
+            raise Exception('当前应用未加入脚本，请联系维护人员')
+
+
+
+    # 点击底部控制栏上的APP
+
+    def click_bottom_app(self, text):
+        '''
+        点击底部控制栏各个应用
+        :param text: 应用名称，eg“导航”
+        :return:
+        '''
+        if text.strip() in Bottom_App_Coord.keys():
+            x, y = Bottom_App_Coord[text]
+            d.click(x, y)
+        else:
+            uit.raise_Exception_info("输入的底部应用未找到")
+
+
+com = Common()

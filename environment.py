@@ -14,7 +14,7 @@ import time
 import sys
 
 from elements.common import Common
-from utils.helpTools import ht
+from utils.helpTools import ht, MAP_VAR
 from utils.uiTools import uit
 
 
@@ -30,7 +30,7 @@ def before_all(context):
     print('开始设置输入法')
     try:
         utf7apk_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'support', 'Utf7Ime.apk')
-        subprocess.call('adb -s ' + serialNum + 'install -r ' + utf7apk_path, shell=True)
+        subprocess.call('adb -s ' + serialNum + ' install -r ' + utf7apk_path, shell=True)
         # 设置输入法
         subprocess.call('adb -s ' + serialNum + ' shell settings put secure default_input_method jp.jun_nama.test.utf7ime/.Utf7ImeService', shell=True)
         print('输入法设置完成')
@@ -74,7 +74,7 @@ def before_scenario(context, scenario):
             print('回到主界面异常输出：')
             print(e)
     print('清空上下文数据')
-    ht.clear_context_map()
+    MAP_VAR.clear()
     print('场景前处理执行结束')
 
 
