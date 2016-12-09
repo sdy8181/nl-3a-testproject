@@ -8,7 +8,7 @@ Created on 11/28/16
 import time
 
 from behave import when,then
-
+from utils.helpTools import MAP_VAR
 from elements.radio import radio
 from utils.uiTools import uit
 
@@ -24,8 +24,18 @@ def step_impl(context):
 def step_impl(context):
     try:
         radio.execute_radio_FM_next()
+        time.sleep(0.5)
     except:
         uit.raise_Exception_info("点击收音机下一台失败")
+
+@when(u'< 点击收音机上一台')
+def step_impl(context):
+    try:
+        radio.execute_radio_FM_prev()
+        time.sleep(0.5)
+    except:
+        uit.raise_Exception_info("点击收音机上一台失败")
+
 
 @when(u'< 点击电台收藏')
 def step_impl(context):
@@ -57,13 +67,14 @@ def step_impl(context):
     ele = radio.get_radio_AST_icon()
     if ele.wait.exists():
         ele.click()
+        time.sleep(0.5)
     else:
         uit.raise_Exception_info("电台自动扫描AST按钮未找到")
 
 
 @when(u'< 点击电台列表')
 def step_impl(context):
-    ele = radio.get_radio_FM_list()
+    ele = radio.get_radio_FM_listicon()
     if ele.wait.exists():
         ele.click()
     else:
@@ -77,6 +88,26 @@ def step_impl(context):
         ele.click()
     else:
         uit.raise_Exception_info("电台收藏列表按钮未找到")
+
+
+@when(u'< 点击底部控制栏返回按钮')
+def step_impl(context):
+    ele = radio.get_radio_back_icon()
+    if ele.wait.exists():
+        ele.click()
+    else:
+        uit.raise_Exception_info("未找到底部控制栏Back按钮")
+
+
+@when(u'< 点击底部控制栏Home按钮')
+def step_impl(context):
+    ele = radio.get_radio_to_home()
+    if ele.wait.exists():
+        ele.click()
+    else:
+        uit.raise_Exception_info("未找到底部控制栏Home按钮")
+
+
 
 @when(u'< 滑动收音机节目单到最前')
 def step_impl(context):
@@ -98,7 +129,7 @@ def step_impl(context):
 @when(u'< 滑动收音机节目列表到指定台')
 def step_impl(context):
     value = context.table[0]['radio_station']
-    ele = radio.get_radio_lists_frequency(value)
+    ele = radio.get_radio_lists_frequency(value.strip())
     if ele.wait.exists():
         ele.click()
     else:
@@ -107,7 +138,72 @@ def step_impl(context):
 
 @when(u'< 获取当前播放电台名称')
 def step_impl(context):
-    name= radio.get_radio_station_name()
+    #接受一个外部指定的名字作为存储获取当前电台名称KEY
+    station_name = context.table[0]['o_station_name']
+
+    station_text= radio.get_radio_station_name()
+    MAP_VAR[station_name]= station_text
+
+
+
+@then(u'< 验证收音机当前状态为暂停')
+def step_impl(context):
+    ele = radio.get_radio_pause_control_icon()
+    if ele.wait.exists():
+        pass
+    else:
+        uit.raise_Exception_info("当前电台不是暂停，请检查")
+
+
+@then(u'< 验证收音机当前状态为播放')
+def step_impl(context):
+    ele1 = radio.get_radio_pause_control_icon()
+    ele2 = radio.get_radio_FM_add2favorite()
+    if not ele1.wait.exists() and ele2.wait.exists():
+        pass
+    else:
+        uit.raise_Exception_info("当前电台不是播放，请检查")
+
+
+
+@then(u'< 验证两次获取的电台名称是一致的')
+def step_impl(context):
+    #接收输入的key参数，从而获取以前保存的value
+    name_key1 =context.table[0]['param1']
+    name_key2 =context.table[0]['param2']
+
+    if name_key1.startswith('o_') :
+        name_key1=MAP_VAR[name_key1]
+
+    if name_key2.startswith('o_'):
+        name_key2 = MAP_VAR[name_key2]
+
+    if name_key1 and name_key2:
+        if name_key1==name_key2:
+            return True
+        else:
+            uit.raise_Exception_info("两次获取的电台名对比出错")
+
+
+
+@then(u'< 验证两次获取的电台名称不一致的')
+def step_impl(context):
+    #接收输入的key参数，从而获取以前保存的value
+    name_key1 =context.table[0]['param1']
+    name_key2 =context.table[0]['param2']
+
+    if name_key1.startswith('o_') :
+        name_key1=MAP_VAR[name_key1]
+
+    if name_key2.startswith('o_'):
+        name_key2 = MAP_VAR[name_key2]
+
+    if name_key1 and name_key2:
+        if name_key1!=name_key2:
+            return True
+        else:
+            uit.raise_Exception_info("两次获取的电台名对比出错")
+
 
 
 
@@ -145,14 +241,20 @@ def step_impl(context):
         uit.raise_Exception_info("正在重新搜台出现异常")
 
 
-@then(u'< 验证搜台结果为网络不可用')
+@then(u'< 验证扫描后结果为空')
 def step_impl(context):
-    total =20
-    while not radio.get_radio_AST_text().wait.exists():
+    total =60
+    while radio.get_radio_AST_text().wait.exists():
         time.sleep(1)
         total=total-1
         if total < 0:
-            uit.raise_Exception_info("正在重新搜台出现异常")
+            uit.raise_Exception_info("搜台无外结束，有异常")
             break
+    if radio.get_radio_scanresult_null().wait.exists():
+        pass
+    else:
+        uit.raise_Exception_info("扫描结果不为空或未进行扫描")
+
+
 
 

@@ -37,7 +37,7 @@ class Radio:
         获取“AST”按钮，可点击
         :return:
         '''
-        return d(resourceId='com.pateo.radio:id/bar_radio_scan_id')
+        return d(className='android.widget.Button',resourceId='com.pateo.radio:id/bar_radio_scan_id')
 
     #获取电台节目列表元素
     def get_radio_FM_listicon(self):
@@ -53,7 +53,7 @@ class Radio:
         获取“电台收藏列表”控件，可点击
         :return:
         '''
-        return d(resourceId='com.pateo.radio:id/bar_radio_list_id')
+        return d(resourceId='com.pateo.radio:id/bar_radio_favorite_id')
 
     #获取添加到收藏按钮
     def get_radio_FM_add2favorite(self):
@@ -71,6 +71,16 @@ class Radio:
         '''
         return d(resourceId='com.pateo.radio:id/bar_radio_ivoka_id')
 
+
+    def get_radio_pause_control_icon(self):
+        '''
+        收音机暂停控件
+        :return: play or pause icon
+        '''
+        return d(className='android.widget.ImageView',resourceId='com.pateo.radio:id/radio_control_id')
+
+
+
     #特殊：点击收音机暂停打开区域
     def execute_radio_FM_playorpause(self):
         '''
@@ -81,14 +91,23 @@ class Radio:
         return d.click(x,y)
 
 
-    # 特殊：点击收音机下一台
+    # !!!!!注意：点击收音机下一台，需要开发该resoureId
     def execute_radio_FM_next(self):
         '''
         收音机下一台点击坐标，注意使用
         :return: 点击动作完成
         '''
-        x, y = uit.get_clickcoord_from_bounds(resourceId='com.pateo.radio:id/new_frequency_iv_sub')
-        return d.click(x, y)
+        # x, y = uit.get_clickcoord_from_bounds(resourceId='com.pateo.radio:id/new_frequency_iv_sub')
+        return d.click(1035, 414)
+    #!!!!!!!!!!
+    def execute_radio_FM_prev(self):
+        '''
+        收音机下一台点击坐标，注意使用
+        :return: 点击动作完成
+        '''
+        # x, y = uit.get_clickcoord_from_bounds(resourceId='com.pateo.radio:id/new_frequency_iv_sub')
+        return d.click(250, 414)
+
 
 
     #获取收音机当前频道值
@@ -111,7 +130,7 @@ class Radio:
         界面左下角back按钮控件，
         :return:
         '''
-        return d(resourceId='com.pateo.radio:id/as_bar_back_id')
+        return d(className='android.widget.Button',resourceId='com.pateo.radio:id/as_bar_back_id')
 
     #获取下控制栏回到主界面的控件
     def get_radio_to_home(self):
@@ -119,7 +138,7 @@ class Radio:
         底部控制栏，回到主界面的Home控件
         :return:
         '''
-        return d(resourceId='com.pateo.radio:id/as_bar_home_id')
+        return d(className='android.widget.Button',resourceId='com.pateo.radio:id/as_bar_home_id')
 
 
     ##获取滚动电台列表的list属性（可点击可scroll）
@@ -166,6 +185,12 @@ class Radio:
         :return:
         '''
         return d(text='正在进行电台预览, 请稍候...',className='android.widget.TextView')
+
+
+    ##收音机天线异常，扫描后电台为空
+    def get_radio_scanresult_null(self):
+
+        return d(text='扫描后电台为空',className='android.widget.TextView')
 
 
     #判断radio给定的频道是否存在
