@@ -82,11 +82,15 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     # 获取场景名称
     sce_name = scenario.name
+    sce_status = scenario.status
+    sce_desc = sce_name + '##' + sce_status
+
     # 发送消息到客户端执行结束一条用例
+
+    cli = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        cli = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         cli.connect(('localhost', 8899))
-        cli.send(sce_name.encode('utf-8'))
+        cli.send(sce_desc.encode('utf-8'))
         time.sleep(2)
     except:
         pass
