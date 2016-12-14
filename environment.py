@@ -92,6 +92,9 @@ def after_scenario(context, scenario):
         cli.connect(('localhost', 8899))
         cli.send(sce_desc.encode('utf-8'))
         time.sleep(2)
+        buf = cli.recv(1024).decode('utf-8')
+        print(buf)
+
     except:
         pass
     finally:
