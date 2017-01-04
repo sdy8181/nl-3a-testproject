@@ -156,6 +156,6 @@ def step_impl(context):
         d.swipe(0, d_height / 2, d_width, d_height / 2, 20)
 
     for i in range(screen_num - 1):
-        d.swipe(d_width, d_height / 2, 0, d_height / 2, 20)
+        d.swipe(d_width / 6 * 5, d_height / 2, 0, d_height / 2, 20)
 
     time.sleep(2)
