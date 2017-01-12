@@ -4,8 +4,10 @@ Created on 11/28/16
 @author: zhiyuanwang
 @email: zhiyuanwang@pateo.com.cn
 '''
+import os
+# os.environ['ANDROID_HOME']='/home/pateo/AndroidSDK/android-sdk-linux/'
 
-from utils.helpTools import d
+from utils.helpTools import d,ht
 from utils.uiTools import uit
 
 
@@ -21,7 +23,15 @@ class Radio:
         FM/AM切换按钮，是个imageView
         :return:
         '''
-        return  d(resourceId='com.pateo.radio:id/bar_radio_type_id')
+        return d(resourceId='com.pateo.radio:id/bar_radio_type_id')
+
+    ##获取电台频率控件
+    def get_radio_frequency_id(self):
+        '''
+        获取频率区域
+        :return: ID
+        '''
+        return d(resourceId='com.pateo.radio:id/new_frequency_iv')
 
     #获取电台预览扫描按钮
     def get_radio_scan_icon(self):
@@ -71,13 +81,16 @@ class Radio:
         '''
         return d(resourceId='com.pateo.radio:id/bar_radio_ivoka_id')
 
-
-    def get_radio_pause_control_icon(self):
+    #通过对比控件数判断播放状态
+    def get_radio_pause_control_status(self):
         '''
         收音机暂停控件
         :return: play or pause icon
         '''
-        return d(className='android.widget.ImageView',resourceId='com.pateo.radio:id/radio_control_id')
+        ui_layout = list(d(resourceId='com.pateo.radio:id/ui_main_layout'))
+        control = list(d(resourceId='com.pateo.radio:id/radio_control_id'))
+        return len(ui_layout),len(control)
+
 
 
 
@@ -216,8 +229,27 @@ class Radio:
         return dic['text']
 
 
+    ##获取电台收藏控件标记状态（有未收藏）
+    def get_radio_collect_status(self):
+        '''
+        :return:
+        '''
+        cur_dir = os.path.dirname(os.path.realpath(__file__))
+        diffImages_path = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages')
+        bds = d(resourceId='com.pateo.radio:id/new_radio_collect_id').info['bounds']
+        filename = uit.cutting_device_screenshot('collect?.png',bds)
+        tmp1 = ht.get_image_diff_data(filename,diffImages_path+'/uncollect.png')
+        tmp2 = ht.get_image_diff_data(filename,diffImages_path+'/collected.png')
+
+        if tmp1==0:
+            return -1
+        elif tmp2 == 0:
+            return 1
+        else:
+            uit.raise_Exception_info('截屏对比收藏节目异常，请查看')
 
 
 
 
 radio = Radio()
+

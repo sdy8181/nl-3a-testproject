@@ -14,10 +14,11 @@ from utils.uiTools import uit
 
 @when(u'< 点击收音机播放与暂停切换区')
 def step_impl(context):
-    try:
-        radio.execute_radio_FM_playorpause()
 
-    except:
+    ele = radio.get_radio_frequency_id()
+    if ele.wait.exists():
+        ele.click()
+    else:
         uit.raise_Exception_info("点击收音机播放或暂停失败")
 
 @when(u'< 点击收音机下一台')
@@ -139,17 +140,17 @@ def step_impl(context):
 @when(u'< 获取当前播放电台名称')
 def step_impl(context):
     #接受一个外部指定的名字作为存储获取当前电台名称KEY
-    station_name = context.table[0]['o_station_name']
+    o_station_name = context.table[0]['o_station_name']
 
     station_text= radio.get_radio_station_name()
-    MAP_VAR[station_name]= station_text
+    MAP_VAR[o_station_name]= station_text
 
 
 
 @then(u'< 验证收音机当前状态为暂停')
 def step_impl(context):
-    ele = radio.get_radio_pause_control_icon()
-    if ele.wait.exists():
+    ele1,ele2 = radio.get_radio_pause_control_status()
+    if ele1 == ele2:
         pass
     else:
         uit.raise_Exception_info("当前电台不是暂停，请检查")
@@ -157,9 +158,8 @@ def step_impl(context):
 
 @then(u'< 验证收音机当前状态为播放')
 def step_impl(context):
-    ele1 = radio.get_radio_pause_control_icon()
-    ele2 = radio.get_radio_FM_add2favorite()
-    if not ele1.wait.exists() and ele2.wait.exists():
+    ele1, ele2 = radio.get_radio_pause_control_status()
+    if ele1 != ele2:
         pass
     else:
         uit.raise_Exception_info("当前电台不是播放，请检查")
@@ -255,6 +255,51 @@ def step_impl(context):
     else:
         uit.raise_Exception_info("扫描结果不为空或未进行扫描")
 
+
+
+@when(u'< 向右滑动收音机界面')
+def step_impl(context):
+
+    ele = radio.get_radio_frequency_id()
+    if ele.wait.exists():
+        ele.swipe.right()
+    else:
+        uit.raise_Exception_info("收音机向右滑动异常")
+
+
+
+@when(u'< 向左滑动收音机界面')
+def step_impl(context):
+
+    ele = radio.get_radio_frequency_id()
+    if ele.wait.exists():
+        ele.swipe.left()
+    else:
+        uit.raise_Exception_info("收音机向左滑动异常")
+
+
+@when(u'< 获取当前收音机节目收藏状态')
+def step_impl(context):
+    # 接受一个外部指定的名字作为存储获取当前电台名称KEY
+    o_state = context.table[0]['o_radio_collect_state']
+    tmp = radio.get_radio_collect_status()
+    MAP_VAR[o_state] = tmp
+
+
+@then(u'< 验证点击收藏按钮后状态响应正确')
+def step_impl(context):
+    key1 = context.table[0]['param1']
+    key2 = context.table[0]['param2']
+
+    if key1.startswith('o_'):
+        key1 = MAP_VAR[key1]
+    if key2.startswith('o_'):
+        key2 = MAP_VAR[key2]
+
+    if key1 != key2:
+        pass
+    else:
+        uit.raise_Exception_info("收音机收藏状态发生异常")
 
 
 

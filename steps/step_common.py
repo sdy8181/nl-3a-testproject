@@ -13,8 +13,11 @@ from utils.helpTools import d, d_height, d_width
 @when(u'< 延时')
 def step_impl(context):
     # 获取延时时间
-    sec = context.table[0]['sleep_time']
-    time.sleep(int(sec))
+    sec = '1'
+    tmp = context.table[0]['sleep_time']
+    if tmp:
+        sec = tmp
+        time.sleep(int(sec))
 
 
 @then(u'< 验证音频通道')
