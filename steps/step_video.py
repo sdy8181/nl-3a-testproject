@@ -91,26 +91,6 @@ def step_impl(context):
     pass
 
 
-@when(u'< 点击视频底部返回按钮')
-def step_impl(context):
-    """
-    点击视频底部返回按钮
-    :param context:
-    :return:
-    """
-    pass
-
-
-@when(u'< 点击视频底部主页按钮')
-def step_impl(context):
-    """
-    点击视频底部主页按钮
-    :param context:
-    :return:
-    """
-    pass
-
-
 @when(u'< 退出视频播放')
 def step_impl(context):
     """
