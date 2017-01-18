@@ -20,6 +20,17 @@ from utils.uiTools import uit
 
 # 前处理检查设备是否连接
 def before_all(context):
+    # 发送消息到客户端
+    cli = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        cli.connect(('localhost', 8899))
+        cli.send('start'.encode('utf-8'))
+        time.sleep(2)
+    except:
+        pass
+    finally:
+        cli.close()
+
     print('校验设备是否连接')
     serialNum = ht.get_conf_value('deviceSerial')
     if not ht.check_is_connected(serialNum):

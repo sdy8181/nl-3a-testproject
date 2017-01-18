@@ -237,8 +237,8 @@ class Radio:
         cur_dir = os.path.dirname(os.path.realpath(__file__))
         diffImages_path = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages')
         bds = d(resourceId='com.pateo.radio:id/new_radio_collect_id').info['bounds']
-        filename = uit.cutting_device_screenshot('collect?.png',bds)
-        tmp1 = ht.get_image_diff_data(filename,diffImages_path+'/uncollect.png')
+        filename = uit.cutting_device_screenshot('collect.png',bds)
+        tmp1 = ht.get_image_diff_data(filename,diffImages_path+'/uncollected.png')
         tmp2 = ht.get_image_diff_data(filename,diffImages_path+'/collected.png')
 
         if tmp1==0:
