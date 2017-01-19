@@ -11,7 +11,7 @@ from utils.uiTools import uit
 from elements.process import process
 
 
-@when('u< 点击全部关闭')
+@when(u'< 点击全部关闭')
 def step_impl(context):
     """
     点击全部关闭按钮
@@ -52,7 +52,8 @@ def step_impl(context):
     status = context.table[0]['status']
 
     process_view = process.get_processes_view()
-    if str(process_view.scroll.vert.to(text=process_name).exists).lower() != \
+
+    if str(process_view.scroll.vert.to(text=process_name)).lower() != \
             status.lower():
         uit.raise_Exception_info('指定进程是否关闭验证失败')
 
