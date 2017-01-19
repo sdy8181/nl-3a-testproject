@@ -53,7 +53,7 @@ def step_impl(context):
 
     process_view = process.get_processes_view()
 
-    if str(process_view.scroll.vert.to(text=process_name)).lower() != \
+    if str(process_view.scroll.vert.to(text=process_name)).lower() == \
             status.lower():
         uit.raise_Exception_info('指定进程是否关闭验证失败')
 
