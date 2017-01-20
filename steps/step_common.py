@@ -89,7 +89,7 @@ def step_impl(context):
 
 @then(u'< 验证文本是否存在')
 def step_impl(context):
-    #获取入参
+    # 获取入参
     txt = context.table[0]['text']
     exists_flag = context.table[0]['exists_flag']
 
@@ -103,6 +103,7 @@ def step_impl(context):
 def step_impl(context):
     device_serial = ht.get_conf_value('deviceSerial')
     os.popen('adb -s ' + device_serial + ' shell reboot')
+
 
 @when(u'< 下拉进程菜单')
 def step_impl(context):
@@ -121,6 +122,8 @@ def step_impl(context):
 
     if key_word.lower() == 'home':
         d.press.home()
+    elif key_word.lower() == 'back':
+        d.press.back()
     elif key_word.lower() == 'v-':
         d.press.volume_down()
     elif key_word.lower() == 'v+':
@@ -128,3 +131,12 @@ def step_impl(context):
     else:
         uit.raise_Exception_info('无法识别的Key')
 
+
+@when(u'< 向左滑动屏幕')
+def step_impl(context):
+    d.swipe(d_width / 6 * 5, d_height / 2, d_width / 6, d_height / 2, 20)
+
+
+@when(u'< 向右滑动屏幕')
+def step_impl(context):
+    d.swipe(d_width / 6, d_height / 2, d_width / 6 * 5, d_height / 2, 20)
