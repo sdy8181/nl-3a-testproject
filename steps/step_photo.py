@@ -159,9 +159,11 @@ def step_impl(context):
     :param context:
     :return:
     """
-    context.execute_steps('''
-    when < 点击图片全屏按钮
-    ''')
+    exit_full_ele = photo.get_photo_preview_exit_fullscreen()
+    if exit_full_ele.wait.exists():
+        exit_full_ele.click()
+    else:
+        uit.raise_Exception_info('图片退出全屏按钮不存在')
 
 
 @then(u'< 验证图片全屏')

@@ -97,6 +97,14 @@ class Photo:
         """
         return d(resourceId=self.__pkg_name + ':id/id_toolbar_btn_fullscreen')
 
+    def get_photo_preview_exit_fullscreen(self):
+        """
+        获取图片预览界面的退出全屏控件
+        :return:
+        """
+        return d(resourceId=self.__pkg_name + ':id/id_toolbar_btn_fullscreen_full')
+
+
     def get_photo_preview_name(self):
         """
         获取图片预览界面的图片名称
