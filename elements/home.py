@@ -32,12 +32,20 @@ class Home:
         '''
         return d(resourceId=self.__pkg_name + ':id/prev')
 
-    def get_music_info_ele(self):
+    def get_music_name(self):
         '''
-        获取主页音乐信息
+        获取主页音乐名称
         :return:
         '''
-        return d(resourceId=self.__pkg_name + ':id/album_info')
+        return d(resourceId=self.__pkg_name + ':id/song_name')
+
+    def get_music_artist(self):
+        '''
+        获取主页音乐歌手
+        :return:
+        '''
+        return d(resourceId=self.__pkg_name + ':id/artist')
+
 
     def get_home_date_ele(self):
         """

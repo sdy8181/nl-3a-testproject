@@ -60,11 +60,10 @@ def step_impl(context):
 def step_impl(context):
     # 获取接收参数
     music_name = context.table[0]['o_result']
-    ele = home.get_music_info_ele()
+    ele = home.get_music_name()
 
     if ele.wait.exists():
-        album_info = ele.text.strip()
-        MAP_VAR[music_name] = album_info.split()[0]
+        MAP_VAR[music_name] = ele.text.strip()
     else:
         uit.raise_Exception_info('主页音乐名称信息获取失败')
 
@@ -73,15 +72,10 @@ def step_impl(context):
 def step_impl(context):
     # 获取接收参数
     artist = context.table[0]['o_result']
-    ele = home.get_music_info_ele()
+    ele = home.get_music_artist()
 
     if ele.wait.exists():
-        album_info = ele.text.strip()
-        info_list = album_info.split()
-        if len(info_list) > 1:
-            MAP_VAR[artist] = info_list[1]
-        else:
-            uit.raise_Exception_info('主页音乐歌手信息获取失败')
+        MAP_VAR[artist] = ele.text.strip()
     else:
         uit.raise_Exception_info('主页音乐名称信息获取失败')
 
