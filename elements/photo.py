@@ -104,6 +104,12 @@ class Photo:
         """
         return d(resourceId=self.__pkg_name + ':id/id_photo_name')
 
+    def get_photo_preview_image_ele(self):
+        """
+        获取图片查看界面元素控件
+        :return:
+        """
+        return d(resourceId=self.__pkg_name + ':id/id_photo_image')
 
 
 photo = Photo()

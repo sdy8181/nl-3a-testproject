@@ -5,6 +5,7 @@ Created on 2/3/17
 @email: guangqianou@pateo.com.cn
 """
 import time
+import re
 from behave import when
 from behave import then
 
@@ -128,3 +129,84 @@ def step_impl(context):
     else:
         uit.raise_Exception_info('图片名称控件不存在')
 
+
+@then(u'< 验证图片文件夹数量一致')
+def step_impl(context):
+    """
+    验证图片文件夹数量一致
+    :param context:
+    :return:
+    """
+    # 获取文件夹名称和期望数量
+    folder_name = context.table[0]['folder_name']
+    photo_number = context.table[0]['number']
+
+    # 获取指定文件夹控件
+    folder_ele = photo.get_photo_folder_by_name(folder_name)
+    if folder_ele.wait.exists():
+        # 获取数量
+        number = re.findall(r"\((\d+)\)$", folder_ele.text.strip())[0]
+        if not photo_number == number:
+            uit.raise_Exception_info('图片数量比对不一致，期望值为%s, 实际值为%s' % (photo_number, number))
+    else:
+        uit.raise_Exception_info('指定图片文件夹不存在')
+
+
+@when(u'< 点击图片退出全屏按钮')
+def step_impl(context):
+    """
+    点击图片退出全屏按钮，回到预览界面
+    :param context:
+    :return:
+    """
+    context.execute_steps('''
+    when < 点击图片全屏按钮
+    ''')
+
+
+@then(u'< 验证图片全屏')
+def step_impl(context):
+    """
+    验证图片全屏
+    等待5s
+    1. 图片视图控件存在
+    2. 图片全屏控件不存在
+    :param context:
+    :return:
+    """
+    # 等待5s 目的为了控件在全屏界面隐藏
+    time.sleep(5)
+    # 获取图片视图控件
+    photo_image_ele = photo.get_photo_preview_image_ele()
+    # 获取全屏控件
+    photo_full_ele = photo.get_photo_preview_fullscreen()
+
+    if photo_image_ele.wait.exists():
+        if photo_full_ele.wait.exists():
+            uit.raise_Exception_info('图片不是全屏状态')
+    else:
+        uit.raise_Exception_info('图片不在图片视图界面')
+
+
+@then(u'< 验证图片退出全屏')
+def step_impl(context):
+    """
+    验证图片退出全屏
+    等待5s
+    1. 图片视图控件存在
+    2. 图片全屏控件存在
+    :param context:
+    :return:
+    """
+    # 等待5s 目的为了控件在全屏界面隐藏
+    time.sleep(5)
+    # 获取图片视图控件
+    photo_image_ele = photo.get_photo_preview_image_ele()
+    # 获取全屏控件
+    photo_full_ele = photo.get_photo_preview_fullscreen()
+
+    if photo_image_ele.wait.exists():
+        if not photo_full_ele.wait.exists():
+            uit.raise_Exception_info('图片是全屏状态')
+    else:
+        uit.raise_Exception_info('图片不在图片视图界面')

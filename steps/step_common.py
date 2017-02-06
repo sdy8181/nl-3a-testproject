@@ -140,3 +140,13 @@ def step_impl(context):
 @when(u'< 向右滑动屏幕')
 def step_impl(context):
     d.swipe(d_width / 6, d_height / 2, d_width / 6 * 5, d_height / 2, 20)
+
+
+@when(u'< 点击屏幕中央')
+def step_impl(context):
+    """
+    点击屏幕中央位置，如播放视频界面，图片全屏界面
+    :param context:
+    :return:
+    """
+    d.click(d_width / 2, d_height / 2)
