@@ -4,9 +4,10 @@ Created on 1/6/17
 @author: 欧光乾
 @email: guangqianou@pateo.com.cn
 """
+import os
 import time
 from behave import when, then
-from utils.helpTools import d, MAP_VAR
+from utils.helpTools import d, MAP_VAR, ht
 from utils.uiTools import uit
 from elements.video import video
 
@@ -118,10 +119,24 @@ def step_impl(context):
     # 获取入参
     status = context.table[0]['status']
     time.sleep(5)
+    cur_dir = os.path.dirname(os.path.realpath(__file__))
+    diffImages_path = os.path.join(os.path.dirname(cur_dir), 'support', 'diffImages')
+
+    if not os.path.exists(diffImages_path):
+        os.mkdir(diffImages_path)
+
+    before_video_imge_path = os.path.join(diffImages_path, 'before_video.png')
+    after_video_imge_path = os.path.join(diffImages_path, 'after_video.png')
+    d.screenshot(before_video_imge_path)
+    time.sleep(5)
+    d.screenshot(after_video_imge_path)
+
+    ret_diff = ht.get_image_diff_data(before_video_imge_path, after_video_imge_path)
+
     play_view_ele = video.get_video_play_view_ele()
-    play_btn_ele = video.get_video_play_btn()
+
     if play_view_ele.wait.exists():
-        if str(play_btn_ele.wait.exists()).lower() == status.lower():
+        if str(ret_diff == 0.0).lower() == status.lower():
             uit.raise_Exception_info('视频播放状态和期望值不一致')
     else:
         uit.raise_Exception_info('视频不在播放界面')
