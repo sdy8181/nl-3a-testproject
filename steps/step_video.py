@@ -53,9 +53,11 @@ def step_impl(context):
     :param context:
     :return:
     """
-    context.execute_steps('''
-    when < 点击暂停播放中视频
-    ''')
+    pause_btn = video.get_video_play_btn()
+    if pause_btn.wait.exists():
+        pause_btn.click()
+    else:
+        uit.raise_Exception_info('暂停或播放按钮不存在')
 
 
 @when(u'< 点击下一个视频')

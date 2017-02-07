@@ -91,6 +91,13 @@ def before_scenario(context, scenario):
     sce_name = scenario.name
     print('=' * 60)
     print('场景《' + sce_name + '》开始执行！')
+    serialNum = ht.get_conf_value('deviceSerial')
+    if ':' in serialNum:
+        try:
+            subprocess.call('adb connect ' + serialNum, shell=True)
+        except:
+            pass
+
     print('执行场景前处理，回到主界面')
     try:
         Common().back_to_launcher()
