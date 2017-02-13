@@ -224,12 +224,14 @@ def step_impl(context):
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
-        else:
+        elif yes_or_no.lower() == 'no':
             choice = d(text='否')
             if choice.wait.exists():
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
+        else:
+            pass
     else:
         uit.raise_Exception_info('收藏按钮不存在')
 
@@ -249,12 +251,14 @@ def step_impl(context):
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
-        else:
+        elif yes_or_no.lower() == 'no':
             choice = d(text='否')
             if choice.wait.exists():
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
+        else:
+            pass
     else:
         uit.raise_Exception_info('收藏按钮不存在')
 
@@ -273,12 +277,14 @@ def step_impl(context):
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
-        else:
+        elif yes_or_no.lower() == 'no':
             choice = d(text='否')
             if choice.wait.exists():
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
+        else:
+            pass
     else:
         uit.raise_Exception_info('收藏按钮不存在')
 
@@ -298,12 +304,14 @@ def step_impl(context):
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
-        else:
+        elif yes_or_no.lower() == 'no':
             choice = d(text='否')
             if choice.wait.exists():
                 choice.click()
             else:
                 uit.raise_Exception_info('收藏弹出框不存在')
+        else:
+            pass
     else:
         uit.raise_Exception_info('收藏按钮不存在')
 
