@@ -4,7 +4,7 @@ import time
 
 from behave import when, then
 
-from elements.common import Common
+from elements.common import com
 from utils.helpTools import ht, MAP_VAR
 from utils.uiTools import uit
 from utils.helpTools import d, d_height, d_width
@@ -41,7 +41,7 @@ def step_impl(context):
     # 获取期望应用名称
     chk_app_name = context.table[0]['app_name']
     # 获取当前应用名称
-    cur_app_name = Common().get_current_package_name()
+    cur_app_name = com.get_current_package_name()
     # 校验
     if chk_app_name != cur_app_name:
         uit.raise_Exception_info('期望应用和当前应用不一致，期望应用为《' + chk_app_name + '》，当前应用为《' + cur_app_name + '》')
@@ -49,12 +49,12 @@ def step_impl(context):
 
 @when(u'< 拔出U盘')
 def step_impl(context):
-    Common().controlPoweroff()
+    com.controlPoweroff()
 
 
 @when(u'< 插上U盘')
 def step_impl(context):
-    Common().controlPoweron()
+    com.controlPoweron()
 
 
 @then(u'< 验证对象值')
@@ -150,3 +150,15 @@ def step_impl(context):
     :return:
     """
     d.click(d_width / 2, d_height / 2)
+
+
+@when(u'< 点击底部二级应用')
+def step_impl(context):
+    """
+    点击应用底部的应用
+    :param context:
+    :return:
+    """
+    # 获取应用名称
+    app_name = context.table[0]['app_name']
+    com.click_bottom_app(app_name)
