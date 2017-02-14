@@ -163,10 +163,12 @@ def step_impl(context):
         d.swipe(x, y, x, y, 50)
 
         #获取快进后的时间
-        after_time = cur_time.text.strip().split(':')
+        time_ele = music.get_music_cur_time_ele()
+        music_name_ele = music.get_music_name_ele()
+        after_time = time_ele.text.strip().split(':')
         after_seconds = int(after_time[0]) * 60 + int(after_time[1])
 
-        after_music_name = cur_music_name.text.strip()
+        after_music_name = music_name_ele.text.strip()
 
         if after_seconds - before_seconds > 10 and before_music_name == after_music_name:
             pass
@@ -197,10 +199,12 @@ def step_impl(context):
         d.swipe(x, y, x, y, 50)
 
         #获取快进后的时间
-        after_time = cur_time.text.strip().split(':')
+        time_ele = music.get_music_cur_time_ele()
+        music_name_ele = music.get_music_name_ele()
+        after_time = time_ele.text.strip().split(':')
         after_seconds = int(after_time[0]) * 60 + int(after_time[1])
 
-        after_music_name = cur_music_name.text.strip()
+        after_music_name = music_name_ele.text.strip()
 
         if before_seconds - after_seconds > 5 and before_music_name == after_music_name:
             pass
