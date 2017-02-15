@@ -51,12 +51,13 @@ def before_all(context):
         print(e)
 
     # 清空logcat日志记录
-    log_path = ht.get_conf_value('logPath')
+    # 该部分处理放在atpc中处理 脱离atpc使用时可放开
+    # log_path = ht.get_conf_value('logPath')
 
-    if sys.platform == 'linux':
-        subprocess.call('rm -rf ' + log_path, shell=True)
-    else:
-        subprocess.call('rd /q/s ' + log_path, shell=True)
+    # if sys.platform == 'linux':
+    #     subprocess.call('rm -rf ' + log_path, shell=True)
+    # else:
+    #     subprocess.call('rd /q/s ' + log_path, shell=True)
 
 
 # 还原设置
