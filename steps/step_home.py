@@ -168,7 +168,8 @@ def step_impl(context):
 def step_impl(context):
     screen_num = int(context.table[0]['number'])
     # 判断是否在第一屏
-    while not d(textContains='导航').exists:
+    
+    while not d(text='媒体').wait.exists():
         d.swipe(0, d_height / 2, d_width, d_height / 2, 20)
 
     for i in range(screen_num - 1):

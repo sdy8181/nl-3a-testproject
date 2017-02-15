@@ -37,7 +37,7 @@ class Common:
 
         d.press.home()
         # 判断是否在第一屏
-        while not d(textContains='导航').exists:
+        while not d(text='媒体').wait.exists():
             d.swipe(0, d_height / 2, d_width, d_height / 2, 20)
 
     def connect_special_wifi(self, ssid, pwd):
