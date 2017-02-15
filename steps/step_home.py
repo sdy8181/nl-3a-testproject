@@ -11,6 +11,14 @@ from elements.home import home
 from utils.helpTools import d_width, d_height, d, MAP_VAR, ht
 from utils.uiTools import uit
 
+HOME_APP_COORD = {
+    '导航': (156, 638),
+    '语音': (398, 638),
+    '多媒体': (640, 638),
+    '电话': (882, 638),
+    '设置': (1124, 638)
+}
+
 
 @when(u'< 点击主页应用')
 def step_impl(context):
@@ -18,9 +26,19 @@ def step_impl(context):
     app_name = context.table[0]['app_name']
     print(app_name)
 
-    if app_name == '导航':
-        x_coordinate, y_coordinate = uit.get_clickcoord_from_bounds(textContains=app_name)
-        d.click(x_coordinate, y_coordinate)
+    if app_name == '收音机':
+        radio_ele = home.get_home_radio_layout()
+        if radio_ele.wait.exists():
+            radio_ele.click()
+        else:
+            uit.raise_Exception_info('收音机控件没有找到')
+    elif app_name == '音乐':
+        music_ele = home.get_music_name()
+        if music_ele.wait.exists():
+            pos_x, pos_y = uit.get_clickcoord_by_ele(music_ele)
+            d.click(pos_x, pos_y)
+        else:
+            uit.raise_Exception_info('音乐控件没有找到')
     else:
         x_coordinate, y_coordinate = uit.get_clickcoord_from_bounds(text=app_name)
         d.click(x_coordinate, y_coordinate)
@@ -63,7 +81,9 @@ def step_impl(context):
     ele = home.get_music_name()
 
     if ele.wait.exists():
-        MAP_VAR[music_name] = ele.text.strip()
+        ele_text = str(ele.text.strip())
+        idx = ele_text.rfind('-')
+        MAP_VAR[music_name] = ele_text[:idx]
     else:
         uit.raise_Exception_info('主页音乐名称信息获取失败')
 
@@ -72,10 +92,12 @@ def step_impl(context):
 def step_impl(context):
     # 获取接收参数
     artist = context.table[0]['o_result']
-    ele = home.get_music_artist()
+    ele = home.get_music_name()
 
     if ele.wait.exists():
-        MAP_VAR[artist] = ele.text.strip()
+        ele_text = str(ele.text.strip())
+        idx = ele_text.rfind('-')
+        MAP_VAR[artist] = ele_text[idx+1:]
     else:
         uit.raise_Exception_info('主页音乐名称信息获取失败')
 
@@ -123,7 +145,7 @@ def step_impl(context):
 def step_impl(context):
     # 获取期望播放状态信息
     play_status = context.table[0]['status']
-    ele = home.get_home_multimediaLayout_ele()
+    ele = home.get_music_play_pause_btn()
 
     if ele.wait.exists():
         time.sleep(5)
@@ -153,3 +175,18 @@ def step_impl(context):
         d.swipe(d_width / 6 * 5, d_height / 2, 0, d_height / 2, 20)
 
     time.sleep(2)
+
+
+@when(u'< 点击主页底部应用')
+def step_impl(context):
+    """
+    点击主页底部五个应用
+    :param context:
+    :return:
+    """
+    app_name = context.table[0]['app_name']
+    if app_name in HOME_APP_COORD.keys():
+        x, y = HOME_APP_COORD.get(app_name)
+        d.click(x, y)
+    else:
+        uit.raise_Exception_info('指定应用名称不存在')

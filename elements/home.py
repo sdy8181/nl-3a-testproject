@@ -61,12 +61,12 @@ class Home:
         """
         return d(resourceId=self.__pkg_name + ':id/week')
 
-    def get_home_multimediaLayout_ele(self):
+    def get_home_radio_layout(self):
         """
-        获取主页音乐布局
+        获取电台视图
         :return:
         """
-        return d(resourceId=self.__pkg_name + ':id/multimediaLayout')
+        return d(resourceId=self.__pkg_name + ':id/radio_layout')
 
 
 
