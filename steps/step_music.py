@@ -403,17 +403,19 @@ def step_impl(context):
     # 获取音乐播放按钮和音乐当前播放时间
     play_ele = music.get_music_play_btn()
     before_time = music.get_music_cur_time_ele()
+    before_time_txt = before_time.text.strip()
     time.sleep(4)
     after_time = music.get_music_cur_time_ele()
+    after_time_txt = after_time.text.strip()
 
     if play_ele.exists:
-        if before_time.text.strip() == after_time.text.strip():
+        if before_time_txt == after_time_txt:
             if status.lower() != 'false':
                 uit.raise_Exception_info('播放状态验证失败，期望状态为播放，实际状态为暂停')
         else:
             uit.raise_Exception_info('播放状态暂停，时间进度还在继续')
     else:
-        if before_time.text.strip() == after_time.text.strip():
+        if before_time_txt == after_time_txt:
             uit.raise_Exception_info('播放状态为播放，时间进度为暂停')
         else:
             if status.lower() != 'true':
