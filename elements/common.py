@@ -63,6 +63,8 @@ class Common:
             return '蓝牙电话'
         elif current_package_name == 'com.pateo.as.photo':
             return '图片'
+        elif current_package_name == 'com.pateo.as.settings':
+            return '设置'
         else:
             raise Exception('当前应用未加入脚本，请联系维护人员')
 
