@@ -12,22 +12,17 @@ from utils.helpTools import ht
 from utils.uiTools import uit
 from utils.helpTools import d, d_height, d_width
 
-
-#底部控制栏上各APP坐标，统一定义维护
-Bottom_App_Coord={
-    '导航':   (236,670),
-    '电话':   (438,670),
-    '收音机': (640,670),
-    '多媒体': (842,670),
-    '天气':   (1044,670),
+# 底部控制栏上各APP坐标，统一定义维护
+Bottom_App_Coord = {
+    '导航': (236, 670),
+    '电话': (438, 670),
+    '收音机': (640, 670),
+    '多媒体': (842, 670),
+    '天气': (1044, 670),
 }
 
 
-
-
-
 class Common:
-
     def back_to_launcher(self):
         '''
         回到主界面
@@ -61,10 +56,15 @@ class Common:
             return '音乐'
         elif current_package_name == 'com.pateo.radio':
             return '收音机'
+        elif current_package_name == 'com.pateo.video':
+            return '视频'
+        elif current_package_name == 'com.pateo.as.btphone' or \
+                        current_package_name == 'com.pateo.as.contacts':
+            return '蓝牙电话'
+        elif current_package_name == 'com.pateo.as.photo':
+            return '图片'
         else:
             raise Exception('当前应用未加入脚本，请联系维护人员')
-
-
 
     # 点击底部控制栏上的APP
 
