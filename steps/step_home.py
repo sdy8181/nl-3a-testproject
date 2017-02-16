@@ -33,7 +33,7 @@ def step_impl(context):
         else:
             uit.raise_Exception_info('收音机控件没有找到')
     elif app_name == '音乐':
-        music_ele = home.get_music_name()
+        music_ele = home.get_home_music_layout()
         if music_ele.wait.exists():
             pos_x, pos_y = uit.get_clickcoord_by_ele(music_ele)
             d.click(pos_x, pos_y)
@@ -168,7 +168,6 @@ def step_impl(context):
 def step_impl(context):
     screen_num = int(context.table[0]['number'])
     # 判断是否在第一屏
-    
     while not d(text='媒体').wait.exists():
         d.swipe(0, d_height / 2, d_width, d_height / 2, 20)
 

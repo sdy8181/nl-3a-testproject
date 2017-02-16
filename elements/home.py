@@ -68,6 +68,14 @@ class Home:
         """
         return d(resourceId=self.__pkg_name + ':id/radio_layout')
 
+    def get_home_music_layout(self):
+        """
+        获取音乐视图
+        :return:
+        """
+        return d(resourceId=self.__pkg_name + ':id/music_layout')
+
+
 
 
 # 初始化对象
