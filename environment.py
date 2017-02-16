@@ -13,7 +13,7 @@ import time
 
 import sys
 
-from elements.common import Common
+from elements.common import com
 from utils.helpTools import ht, MAP_VAR
 from utils.uiTools import uit
 
@@ -101,7 +101,7 @@ def before_scenario(context, scenario):
 
     print('执行场景前处理，回到主界面')
     try:
-        Common().back_to_launcher()
+        com.back_to_launcher()
     except Exception as e:
         if uit.crash_handler():
             print('回到主界面有CRASH')
