@@ -403,10 +403,12 @@ def step_impl(context):
     # 获取音乐播放按钮和音乐当前播放时间
     play_ele = music.get_music_play_btn()
     before_time = music.get_music_cur_time_ele()
-    before_time_txt = before_time.text.strip()
+    before_time_txt = before_time.text.strip() if before_time.wait.exists() else None
+
     time.sleep(4)
+
     after_time = music.get_music_cur_time_ele()
-    after_time_txt = after_time.text.strip()
+    after_time_txt = after_time.text.strip() if after_time.wait.exists() else None
 
     if play_ele.exists:
         #判断如果是蓝牙音乐的情况
