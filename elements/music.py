@@ -45,7 +45,7 @@ class Music:
         if time_info.wait.exists():
             return time_info.sibling(resourceId=self.__pkg_name + ':id/musicName')
         else:
-            uit.raise_Exception_info('获取音乐名称失败')
+            return d(resourceId=self.__pkg_name + ':id/musicName')
 
     def get_music_artist_name_ele(self):
         """
@@ -59,14 +59,17 @@ class Music:
         if time_info.wait.exists():
             return time_info.sibling(resourceId=self.__pkg_name + ':id/artistName')
         else:
-            uit.raise_Exception_info('获取歌手失败')
+            return d(resourceId=self.__pkg_name + ':id/artistName')
 
     def get_music_play_pause_coordinate(self):
         """
         获取音乐播放或者暂停坐标
         :return:
         """
-        return uit.get_clickcoord_from_bounds(resourceId=self.__pkg_name + ':id/musicCoverFlow')
+        if d(resourceId=self.__pkg_name + ':id/musicCoverFlow').wait.exists():
+            return uit.get_clickcoord_from_bounds(resourceId=self.__pkg_name + ':id/musicCoverFlow')
+        else:
+            return uit.get_clickcoord_from_bounds(resourceId=self.__pkg_name + ':id/musicName')
 
     def get_music_artists_list_btn(self):
         """
