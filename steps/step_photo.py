@@ -130,6 +130,25 @@ def step_impl(context):
         uit.raise_Exception_info('图片名称控件不存在')
 
 
+@when(u'< 获取指定图片文件夹数量')
+def step_impl(context):
+    """
+    获取指定文件夹图片数量
+    :param context:
+    :return:
+    """
+    folder_name = context.table[0]['folder_name']
+    photo_number = context.table[0]['o_result']
+    # 获取指定文件夹控件
+    folder_ele = photo.get_photo_folder_by_name(folder_name)
+    if folder_ele.wait.exists():
+        # 获取数量
+        number = re.findall(r"\((\d+)\)$", folder_ele.text.strip())[0]
+        MAP_VAR[photo_number] = number
+    else:
+        uit.raise_Exception_info('指定图片文件夹不存在')
+
+
 @then(u'< 验证图片文件夹数量一致')
 def step_impl(context):
     """
@@ -140,6 +159,15 @@ def step_impl(context):
     # 获取文件夹名称和期望数量
     folder_name = context.table[0]['folder_name']
     photo_number = context.table[0]['number']
+    if photo_number.startswith('o_'):
+        if '-' in photo_number:
+            var_number_list = photo_number.split('-')
+            photo_number = str(int(MAP_VAR[var_number_list[0]]) - int(var_number_list[1]))
+        elif '+' in photo_number:
+            var_number_list = photo_number.split('+')
+            photo_number = str(int(MAP_VAR[var_number_list[0]]) + int(var_number_list[1]))
+        else:
+            photo_number = MAP_VAR[photo_number]
 
     # 获取指定文件夹控件
     folder_ele = photo.get_photo_folder_by_name(folder_name)
