@@ -409,17 +409,27 @@ def step_impl(context):
     after_time_txt = after_time.text.strip()
 
     if play_ele.exists:
-        if before_time_txt == after_time_txt:
-            if status.lower() != 'false':
-                uit.raise_Exception_info('播放状态验证失败，期望状态为播放，实际状态为暂停')
+        #判断如果是蓝牙音乐的情况
+        if before_time.wait.exists():
+            if before_time_txt == after_time_txt:
+                if status.lower() != 'false':
+                    uit.raise_Exception_info('播放状态验证失败，期望状态为播放，实际状态为暂停')
+            else:
+                uit.raise_Exception_info('播放状态暂停，时间进度还在继续')
         else:
-            uit.raise_Exception_info('播放状态暂停，时间进度还在继续')
+            if status.lower() != 'false':
+                    uit.raise_Exception_info('播放状态验证失败，期望状态为播放，实际状态为暂停')
+
     else:
-        if before_time_txt == after_time_txt:
-            uit.raise_Exception_info('播放状态为播放，时间进度为暂停')
+        if before_time.wait.exists():
+            if before_time_txt == after_time_txt:
+                uit.raise_Exception_info('播放状态为播放，时间进度为暂停')
+            else:
+                if status.lower() != 'true':
+                    uit.raise_Exception_info('播放状态验证失败，期望状态为暂停，实际状态为播放')
         else:
             if status.lower() != 'true':
-                uit.raise_Exception_info('播放状态验证失败，期望状态为暂停，实际状态为播放')
+                    uit.raise_Exception_info('播放状态验证失败，期望状态为暂停，实际状态为播放')
 
 
 @then(u'< 验证是U盘音乐')
@@ -463,18 +473,6 @@ def step_impl(context):
     flag = music.get_album_collect_status_from_album_list_by_name(album_name)
     if collected_status.lower() != str(flag).lower():
         uit.raise_Exception_info('指定专辑《' + album_name + '》收藏状态不一致')
-
-
-@then(u'< 验证音乐收藏列表播放状态')
-def step_impl(context):
-    # # 获取音乐名称和期望播放状态
-    music_name = context.table[0]['music_name']
-    play_status = context.table[0]['play_status']
-
-    flag = music.get_music_play_status_from_collect_list_by_name(music_name)
-
-    if play_status.lower() != str(flag).lower():
-        uit.raise_Exception_info('指定音乐《' + music_name + '》播放状态不一致')
 
 
 @then(u'< 验证音乐从头播放')
